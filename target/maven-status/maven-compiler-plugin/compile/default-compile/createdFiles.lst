@@ -1,0 +1,17 @@
+com\mastercom\ps\connector\examples\tests\CaseFillingStatusReq.class
+com\mastercom\ps\connector\examples\tests\XmlManagingException.class
+com\mastercom\ps\connector\utils\JsonUtils.class
+com\mastercom\ps\connector\examples\QueuesRetrieveClaimsFromQueueBKP.class
+com\mastercom\ps\connector\MDRConnector.class
+com\mastercom\ps\connector\examples\CaseFilingRetrieveDocumentationBKP.class
+com\mastercom\ps\connector\examples\CaseFillingCreateBKP.class
+com\mastercom\ps\connector\config\ServiceConfiguration.class
+com\mastercom\ps\connector\examples\tests\XmlToObject.class
+com\mastercom\ps\connector\examples\RetrievalsAcquierFulfillARequestBKP.class
+com\mastercom\ps\connector\exceptions\XmlUtilsException.class
+com\mastercom\ps\connector\config\ServiceConfiguration$ConnectionTimeout.class
+com\mastercom\ps\connector\examples\CaseFilingStatusBKP.class
+com\mastercom\ps\connector\config\ServiceConfiguration$HttpProxyConfiguration.class
+com\mastercom\ps\connector\examples\RetrievalsGetDocumentationBKP.class
+com\mastercom\ps\connector\utils\XmlUtils.class
+com\mastercom\ps\connector\examples\CaseFilingUpdateBKP.class

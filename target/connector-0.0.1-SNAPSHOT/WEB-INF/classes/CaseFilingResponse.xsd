@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="ResponseData" type="CaseFilingResponseData" />
+	<xs:complexType name="CaseFilingResponseData">
+		<xs:sequence>
+			<xs:element type="xs:string" name="method" />
+			<xs:choice>
+				<xs:element name="caseID" type="CaseID"></xs:element>
+				<xs:element name="fileAttachment" type="fileAttachment" />
+				<xs:element name="caseFilingResponseList"
+					type="CaseFilingResponseList" maxOccurs="unbounded" minOccurs="0" />
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!--Case Filing -->
+	<!-- RETRIEVE DOCUMENTATION -->
+	<xs:complexType name="fileAttachment">
+		<xs:sequence>
+			<xs:element name="filename" type="xs:string" />
+			<xs:element name="file" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<!-- CREATE | UPDATE -->
+	<xs:complexType name="CaseID">
+		<xs:sequence>
+			<xs:element name="caseId" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<!-- CASE FILING STATUS -->
+	<xs:complexType name="CaseFilingResponseList">
+		<xs:sequence>
+			<xs:element type="xs:int" name="case-id" />
+			<xs:element type="xs:string" name="status" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
