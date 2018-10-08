@@ -63,19 +63,19 @@ public final class XmlUtils {
 	 */
 	public XmlUtils(final String xml) throws XmlUtilsException {
 		this.xml = this.removeExcapeSequenceAndBlankCharacters(xml);
-		log.debug("Xml/Request: " + this.xml);
+		log.info("Request: " + this.xml);
 		this.headName = this.createHeadName();
-		log.debug("HeadName [className/method]: " + headName);
+		log.info("HeadName: " + headName);
 		this.head = this.createHead();
-		log.debug("Head [xml header]:" + head);
+		log.info("Head tag:" + head);
 		requestParameters = createRequestParameters();
-		log.debug("RequestParameters [Parametri]: " + ("".equals(requestParameters) ? "vuoto" : requestParameters));
+		log.info("RequestParameters: " + ("".equals(requestParameters) ? "vuoto" : requestParameters));
 		end = createEnd(headName);
-		log.debug("End [xml tag di chiusura]: " + end);
+		log.info("End tag: " + end);
 		classe = getClasse();
-		log.debug("Classe di riferimento: " + classe);
+		log.info("Classe di riferimento: " + classe);
 		executionMethod = getExecutionMethod();
-		log.debug("Metodo di riferimento: " + executionMethod);
+		log.info("Metodo di riferimento: " + executionMethod);
 	}
 
 	/**
@@ -87,21 +87,19 @@ public final class XmlUtils {
 	}
 
 	/**
-	 * Genera un xml che rappresenta un oggetto di tipo Rest
+	 * Crea l'xml con i dati che andranno in pasto all'oggetto REST di Mastercard
 	 * 
 	 * @return Xml con i dati presenti nei tag <code>method</code> e
 	 *         <code>RequestParameters</code> se presente
 	 * @throws XmlUtilsException
 	 */
 	public String createRestObjectRequest() throws XmlUtilsException {
-		log.debug("Inzio elaborazione xml");
-
 		String head = this.getHead();
 		String requestParameters = this.getRequestParameters();
 		String end = this.getEnd();
 		String result = head + requestParameters + end;
 
-		log.info("Fine eleaborazione xm: " + result);
+		log.info("Xml-requestParameters: " + result);
 
 		return result;
 	}
