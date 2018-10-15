@@ -33,7 +33,21 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
- * Classe di Utilità per la gestione delle request in formato <code>xml</code>
+ * Classe di Utilità per la gestione delle request in formato <code>xml</code>.
+ * Crea un oggetto XmlUtils dal xml originale e estrapola informazioni
+ * necessarie al processo/flusso del connettore, di seguito:
+ * </p>
+ * <ul>
+ * <li>tagMethod - valore del tag method</li>
+ * <li>method - metodo che fa riferimento all'end-point della risorsa
+ * rest: retrieveDocumentation della classe CaseFiling</li>
+ * <li>headName - (classe+metodo) della risorsa Rest e.g.:
+ * CaseFilingRetrieveDocumentation</li>
+ * <li>head - tag root</li>
+ * <li>requestParameters - valori della risorsa Rest</li>
+ * <li>end - tag chiusura</li>
+ * <li>classe - nome della risorsa Rest e.g.: CaseFiling</li>
+ * </ul>
  * 
  * <p>
  * 
@@ -44,26 +58,29 @@ public final class XmlUtils {
 
 	private final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	/**
-	 * Costante valorizzata in fase di creazione oggetto, rappresenta l'xml in input
+	 * Xml in input
 	 */
 	private final String xml;
 	private final String headName;
+	private final String tagMethod;
 	private final String head;
 	private final String requestParameters;
 	private final String end;
 	private final String classe;
-	private final String executionMethod;
+	private final String method;
 
 	/**
-	 * Crea un XmlUtils con il valore iniziale del xml
+	 * 
 	 * 
 	 * @param xml
 	 * @throws XmlUtilsException
-	 *             - nel caso non sia valorizzato il tag method nel xml
+	 *             - nel caso non sia valorizzato il tag tagMethod nel xml
 	 */
 	public XmlUtils(final String xml) throws XmlUtilsException {
 		this.xml = this.removeExcapeSequenceAndBlankCharacters(xml);
 		log.info("Request: " + this.xml);
+		this.tagMethod = this.getTagMethod();
+		log.info("Metodo: " + tagMethod);
 		this.headName = this.createHeadName();
 		log.info("HeadName: " + headName);
 		this.head = this.createHead();
@@ -74,8 +91,8 @@ public final class XmlUtils {
 		log.info("End tag: " + end);
 		classe = getClasse();
 		log.info("Classe di riferimento: " + classe);
-		executionMethod = getExecutionMethod();
-		log.info("Metodo di riferimento: " + executionMethod);
+		method = getMethod();
+		log.info("Metodo di riferimento: " + method);
 	}
 
 	/**
@@ -89,7 +106,7 @@ public final class XmlUtils {
 	/**
 	 * Crea l'xml con i dati che andranno in pasto all'oggetto REST di Mastercard
 	 * 
-	 * @return Xml con i dati presenti nei tag <code>method</code> e
+	 * @return Xml con i dati presenti nei tag <code>tagMethod</code> e
 	 *         <code>RequestParameters</code> se presente
 	 * @throws XmlUtilsException
 	 */
@@ -105,23 +122,18 @@ public final class XmlUtils {
 	}
 
 	/**
-	 * Estrapola il valore del tag <code>method</code> presente nell'input passato
-	 * come paramentro
+	 * Estrapola il valore del tag <code>tagMethod</code> presente nell'input
+	 * passato come paramentro
 	 * 
-	 * @return Il valore del tag <code>method</code>
+	 * @return Il valore del tag <code>tagMethod</code>
 	 * 
 	 * @throws XmlUtilsException
 	 *             Vengono lanciate eccezioni a fronte della presenza e della
-	 *             valorizzazione del tag <code>method</code>
+	 *             valorizzazione del tag <code>tagMethod</code>
 	 */
-	public String getMethod() throws XmlUtilsException {
+	public String getTagMethod() throws XmlUtilsException {
 		isMethodParamPresents();
-		String method = xml.substring(xml.indexOf("<method>") + 8, xml.indexOf("</method>"));
-		if (null == method || "".equals(method)) {
-			String err = "Il tag <method>: [" + method + "] è vuoto";
-			log.error(err);
-			throw new XmlUtilsException(err);
-		}
+		String method = xml.substring(xml.indexOf("<tagMethod>") + 8, xml.indexOf("</tagMethod>"));
 		return method;
 	}
 
@@ -145,10 +157,10 @@ public final class XmlUtils {
 	}
 
 	/**
-	 * Produce il nome della risorsa Rest dal tag <code>method</code> e.g:
+	 * Produce il nome della risorsa Rest dal tag <code>tagMethod</code> e.g:
 	 * <p>
 	 * <ul>
-	 * <li>il tag method: CaseFiling.retrieveDocumentation produrrà il nome -
+	 * <li>il tag tagMethod: CaseFiling.retrieveDocumentation produrrà il nome -
 	 * CaseFilingRetrieveDocumentation</li>
 	 * </ul>
 	 * 
@@ -156,15 +168,16 @@ public final class XmlUtils {
 	 * @throws XmlUtilsException
 	 */
 	private String createHeadName() throws XmlUtilsException {
-		String method = getMethod();
-		StringBuilder strBuilder = new StringBuilder(method);
+		// String tagMethod = getMethod();
+		StringBuilder strBuilder = new StringBuilder(tagMethod);
 		// Uppercase primo carattere
-		Character firstCharUpper = method.substring(0).toUpperCase().toCharArray()[0];
+		Character firstCharUpper = tagMethod.substring(0).toUpperCase().toCharArray()[0];
 		// sostituzione
 		strBuilder.setCharAt(0, firstCharUpper);
-		Character upperCharAfterPoint = method.substring((method.indexOf(".") + 1)).toUpperCase().toCharArray()[0];
+		Character upperCharAfterPoint = tagMethod.substring((tagMethod.indexOf(".") + 1)).toUpperCase()
+				.toCharArray()[0];
 		// Uppercase dopo punto
-		strBuilder.setCharAt(method.indexOf(".") + 1, upperCharAfterPoint);
+		strBuilder.setCharAt(tagMethod.indexOf(".") + 1, upperCharAfterPoint);
 		// Sostituzione punto
 		String headName = strBuilder.toString();
 		return headName.replace(".", "");
@@ -179,7 +192,6 @@ public final class XmlUtils {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<" + this.headName + ">";
 	}
 
-	
 	/**
 	 * Crea il tag <i>radice</i> del xml tramite l'argomento passato
 	 * 
@@ -190,7 +202,7 @@ public final class XmlUtils {
 	public String createHead(String headName) {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<" + headName + ">";
 	}
-	
+
 	/**
 	 * Tramite l'argomento passato compone il tag di <i>chiusura</i> del xml
 	 * 
@@ -224,7 +236,7 @@ public final class XmlUtils {
 	}
 
 	/**
-	 * Verifica la presenza del tag <code>method</code> nel xml di input
+	 * Verifica la presenza del tag <code>tagMethod</code> nel xml di input
 	 * 
 	 * @return
 	 *         <ul>
@@ -234,8 +246,8 @@ public final class XmlUtils {
 	 */
 	private boolean isMethodParamPresents() throws XmlUtilsException {
 		boolean isMethodParamsPresent = false;
-		if (xml.indexOf("<method>") < 0) {
-			String err = "Nel xml in input non è presente il tag  <method>";
+		if (xml.indexOf("<tagMethod>") < 0) {
+			String err = "Nel xml in input non è presente il tag  <tagMethod>";
 			log.error(err);
 			throw new XmlUtilsException(err);
 		} else {
@@ -281,7 +293,6 @@ public final class XmlUtils {
 		transformer.transform(new DOMSource(doc), new StreamResult(sw));
 		return sw.toString();
 	}
-
 
 	/**
 	 * Elimina i caratteri di escape sequence [<code>\n, \r</code>] e i caratteri
@@ -365,29 +376,30 @@ public final class XmlUtils {
 	 * @throws XmlUtilsException
 	 */
 	public String getClasse() throws XmlUtilsException {
-		String tmp = this.getMethod();
+		// String tmp = this.getMethod();
+		String tmp = this.tagMethod;
 		String method = tmp.replace(tmp.charAt(0), Character.toUpperCase(tmp.charAt(0)));
 		return method.substring(0, method.indexOf("."));
 	}
 
 	/**
-	 * Restituisce una stringa contenente l'attributo executionMethod rappresentante
-	 * il method da invocare sulla risorsa Rest. L'operazione prevede una
+	 * Restituisce una stringa contenente l'attributo method rappresentante
+	 * l'end-point da invocare sulla risorsa Rest. L'operazione prevede una
 	 * conversione del primo carattere da maiuscolo a minuscolo.
 	 * 
-	 * @return attributo executionMethod
+	 * @return attributo method
 	 * @throws XmlUtilsException
 	 */
-	public String getExecutionMethod() throws XmlUtilsException {
-		String tmp = this.getMethod();
+	public String getMethod() throws XmlUtilsException {
+		// String tmp = this.getMethod();
+		String tmp = this.tagMethod;
 		String method = tmp.replace(tmp.charAt(0), Character.toLowerCase(tmp.charAt(0)));
 		return method.substring(tmp.indexOf(".") + 1);
 	}
 
 	/**
-	 * Classe innestata e statica che rappresenta un'implementazione
-	 * dell'interfaccia {@link Converter} per la conversione di tipo map/xml
-	 * attraverso i metodi <i>marshal</i> e <i>unmarshal</i>
+	 * Classe innestata che rappresenta un'implementazione dell'interfaccia
+	 * {@link Converter} per la conversione di tipo map/xml.
 	 * 
 	 * @author SabatiniJa
 	 *

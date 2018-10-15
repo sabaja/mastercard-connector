@@ -1,7 +1,7 @@
 package com.mastercom.ps.connector.stub;
 
 /**
- * Questa enumerazione è la rappresentazione dei micro-servizi esposti da
+ * Questa enumerazione è la rappresentazione dei principali servizi esposti da
  * Mastercard
  * 
  * @author SabatiniJa

@@ -97,7 +97,6 @@ public class MDRConnector implements TargetConnector {
 	public IBResponse ping(IBRequest request) throws GeneralFrameworkException, DuplicateMessageException,
 			InvalidMessageException, ExternalSystemContactException, ExternalApplicationException,
 			MessageMarshallingException, MessageUnmarshallingException {
-		// TODO Auto-generated method stub
 		return send(request);
 	}
 
@@ -105,6 +104,7 @@ public class MDRConnector implements TargetConnector {
 	public IBResponse send(IBRequest request) throws GeneralFrameworkException, DuplicateMessageException,
 			InvalidMessageException, ExternalSystemContactException, ExternalApplicationException,
 			MessageMarshallingException, MessageUnmarshallingException {
+		// TODO
 		log.info("SEND | Inzio richiesta");
 		String responseString = null;
 		try {
@@ -173,11 +173,11 @@ public class MDRConnector implements TargetConnector {
 			TransactionLogConfig transactionLogConfig = null;
 			try {
 				// TODO
-				// Da togliere request gia presente
+				// Da togliere variabile xml già presente è: IBRequest request 
 				xml = new String(Files.readAllBytes(Paths.get(file)));
 
 				xmlUtils = new XmlUtils(xml);
-				serviceName = xmlUtils.getMethod();
+				serviceName = xmlUtils.getTagMethod();
 				System.out.println(serviceName);
 				transactionLogConfig = new TransactionLogConfig(serviceName);
 				xmlObjectRequest = xmlUtils.createRestObjectRequest();
@@ -192,7 +192,7 @@ public class MDRConnector implements TargetConnector {
 				requestMap = new RequestMap(jsonObjectRequest);
 
 				// TODO
-				// Inserire classe SWITCH
+				// Inserire classe di controllo flusso tipo manager/SWITCH
 				CaseFilingService<CaseFiling, RequestMap> service = new CaseFilingServiceImpl();
 
 				resource = service.retrieveDocumentation(requestMap);
