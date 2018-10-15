@@ -15,3 +15,4 @@ com\mastercom\ps\connector\config\ServiceConfiguration$HttpProxyConfiguration.cl
 com\mastercom\ps\connector\examples\RetrievalsGetDocumentationBKP.class
 com\mastercom\ps\connector\utils\XmlUtils.class
 com\mastercom\ps\connector\examples\CaseFilingUpdateBKP.class
+com\mastercom\ps\connector\stub\manager\StubManager$1.class

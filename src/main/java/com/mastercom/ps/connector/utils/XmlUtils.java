@@ -133,7 +133,7 @@ public final class XmlUtils {
 	 */
 	public String getTagMethod() throws XmlUtilsException {
 		isMethodParamPresents();
-		String method = xml.substring(xml.indexOf("<tagMethod>") + 8, xml.indexOf("</tagMethod>"));
+		String method = xml.substring(xml.indexOf("<method>") + 8, xml.indexOf("</method>"));
 		return method;
 	}
 
@@ -246,8 +246,8 @@ public final class XmlUtils {
 	 */
 	private boolean isMethodParamPresents() throws XmlUtilsException {
 		boolean isMethodParamsPresent = false;
-		if (xml.indexOf("<tagMethod>") < 0) {
-			String err = "Nel xml in input non è presente il tag  <tagMethod>";
+		if (xml.indexOf("<method>") < 0) {
+			String err = "Nel xml in input non è presente il tag  <method>";
 			log.error(err);
 			throw new XmlUtilsException(err);
 		} else {

@@ -1,28 +1,22 @@
 package com.mastercom.ps.connector;
 
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.mail.internet.InternetHeaders;
 
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.log4j.Logger;
 
-import com.mastercard.api.core.exception.ApiException;
 import com.mastercard.api.core.model.RequestMap;
 import com.mastercard.api.mastercom.CaseFiling;
-import com.mastercom.ps.connector.config.TransactionLogConfig;
 import com.mastercom.ps.connector.config.ServiceConfiguration;
+import com.mastercom.ps.connector.config.TransactionLogConfig;
 import com.mastercom.ps.connector.examples.tests.CaseFillingStatusReq;
-import com.mastercom.ps.connector.exceptions.XmlUtilsException;
-import com.mastercom.ps.connector.response.domain.casefiling.CaseFilingHandler;
-import com.mastercom.ps.connector.response.domain.casefiling.CaseFilingHandlerImpl;
+import com.mastercom.ps.connector.response.domain.casefiling.CaseFilingResponseHandler;
+import com.mastercom.ps.connector.response.domain.casefiling.CaseFilingResponseHandlerImpl;
 import com.mastercom.ps.connector.service.CaseFilingService;
 import com.mastercom.ps.connector.service.CaseFilingServiceImpl;
 import com.mastercom.ps.connector.utils.JsonUtils;
@@ -45,10 +39,13 @@ import com.thoughtworks.xstream.XStream;
 /**
  * Classe di connessione tra l'Integration Broker di Peoplesoft e l'API di
  * MasterCard.</br>
- * Il connettore è subordinato all'interfaccia {@link TargetConnection} che, per
- * ogni request da inviare a Mastercard, viene invocato il metodo
- * {@link MDRConnector#send(IBRequest)} da PeopleSoft.<br>
- * Tale invocazione mette in moto un processo diviso in quattro Stadi
+ * Il connettore implementa l'interfaccia {@link TargetConnection} che, a fronte
+ * di ogni request da inviare a Mastercard PeopleSoft ne invoca il metodo
+ * {@link MDRConnector#send(IBRequest)}.
+ * <br>
+ * Tale meccanismo isola chiamate in modo tale da rendere il connettore
+ * thread-safe.<br>
+ * Il processo di elaborazione del connettore è suddivisibile in quattro stadi
  * <u>consecutivi</u>:<br>
  * <ol type="1">
  * <li>Ricezione request in formato xml</li>
@@ -143,6 +140,7 @@ public class MDRConnector implements TargetConnector {
 		this.connInfo = connInfo;
 	}
 
+	@SuppressWarnings("unused")
 	private ServiceConfiguration getServiceConfiguration() {
 		return serviceConfiguration;
 	}
@@ -173,7 +171,7 @@ public class MDRConnector implements TargetConnector {
 			TransactionLogConfig transactionLogConfig = null;
 			try {
 				// TODO
-				// Da togliere variabile xml già presente è: IBRequest request 
+				// Da togliere variabile xml già presente è: IBRequest request
 				xml = new String(Files.readAllBytes(Paths.get(file)));
 
 				xmlUtils = new XmlUtils(xml);
@@ -196,7 +194,7 @@ public class MDRConnector implements TargetConnector {
 				CaseFilingService<CaseFiling, RequestMap> service = new CaseFilingServiceImpl();
 
 				resource = service.retrieveDocumentation(requestMap);
-				CaseFilingHandler<CaseFiling> caseFilingResponse = new CaseFilingHandlerImpl();
+				CaseFilingResponseHandler<CaseFiling> caseFilingResponse = new CaseFilingResponseHandlerImpl();
 				String response = caseFilingResponse.getRetrieveDocumentationResponse(resource,
 						"CaseFiling.retrieveDocumentation");
 				// FINE
