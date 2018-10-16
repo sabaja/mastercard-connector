@@ -21,6 +21,7 @@ import com.mastercom.ps.connector.service.CaseFilingService;
 import com.mastercom.ps.connector.service.CaseFilingServiceImpl;
 import com.mastercom.ps.connector.utils.JsonUtils;
 import com.mastercom.ps.connector.utils.XmlUtils;
+import com.peoplesoft.pt.integrationgateway.common.ConnectorData;
 import com.peoplesoft.pt.integrationgateway.common.ConnectorDataCollection;
 import com.peoplesoft.pt.integrationgateway.common.DuplicateMessageException;
 import com.peoplesoft.pt.integrationgateway.common.ExternalApplicationException;
@@ -87,7 +88,12 @@ public class MDRConnector implements TargetConnector {
 	}
 
 	public ConnectorDataCollection introspectConnector() {
-		return null;
+		final ConnectorDataCollection conCollection = new ConnectorDataCollection();
+		final ConnectorData conData = new ConnectorData("VISARTSI");
+		conData.addConnectorField("URL", false, "", "");
+		conData.addConnectorField("HEADER", "TimeOut", false, "", "");
+		conCollection.addConnectorData(conData);
+		return conCollection;
 	}
 
 	@Override
