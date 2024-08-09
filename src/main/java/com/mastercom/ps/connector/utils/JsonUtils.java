@@ -39,10 +39,9 @@ public final class JsonUtils {
 	 */
 	public JsonUtils(final String xml, final boolean keepStrings) {
 
-		log.debug("Inizio elaborazione json: " + this.getJson());
 		xmlJSONObj = XML.toJSONObject(xml, keepStrings);
 		this.json = xmlJSONObj.toString();
-		log.debug("Fine elaborazione json: " + this.getJson());
+		log.debug("json intermedio: " + this.getJson());
 
 	}
 
@@ -78,11 +77,10 @@ public final class JsonUtils {
 	 */
 	public String createRestJson(final String json, final String headName) {
 		final int headIndexOf = (json.indexOf("{\"" +headName + "\":"));
-		log.debug("headIndexOf " + headIndexOf);
 		final int LEN = ("{\"" +headName + "\":").length();
-		log.debug("LEN " + LEN);
+		log.debug("headName: " + headName +" LEN: " + LEN);
 		String tmp = json.substring(LEN, json.lastIndexOf("}"));
-		log.debug("risorsa rest: " + tmp);
+		log.info("json: " + tmp);
 		return tmp;
 	}
 }

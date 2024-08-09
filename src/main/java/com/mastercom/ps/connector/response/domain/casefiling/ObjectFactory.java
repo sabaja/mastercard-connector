@@ -41,11 +41,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CaseFilingResponseData }
+     * Create an instance of {@link CaseFilingData }
      * 
      */
-    public CaseFilingResponseData createCaseFilingResponseData() {
-        return new CaseFilingResponseData();
+    public CaseFilingData createCaseFilingResponseData() {
+        return new CaseFilingData();
     }
 
     /**
@@ -73,12 +73,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CaseFilingResponseData }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link CaseFilingData }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "ResponseData")
-    public JAXBElement<CaseFilingResponseData> createResponseData(CaseFilingResponseData value) {
-        return new JAXBElement<CaseFilingResponseData>(_ResponseData_QNAME, CaseFilingResponseData.class, null, value);
+    public JAXBElement<CaseFilingData> createResponseData(CaseFilingData value) {
+        return new JAXBElement<CaseFilingData>(_ResponseData_QNAME, CaseFilingData.class, null, value);
     }
 
 }

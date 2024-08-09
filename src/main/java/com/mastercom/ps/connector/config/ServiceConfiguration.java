@@ -49,10 +49,18 @@ public class ServiceConfiguration {
 	private int connectTimeout;
 	private int connectionRequestTimeout;
 
+	/**
+	 * Instanziare per connessione locale
+	 */
 	public ServiceConfiguration() {
 		setLocalConfig();
 	}
 
+	/**
+	 * Instanziare per ambienti SVILUPPO/STAGE/PRODUZIONE
+	 * 
+	 * @param connInfo
+	 */
 	public ServiceConfiguration(ConnectorInfo connInfo) {
 		setConfig(connInfo);
 	}

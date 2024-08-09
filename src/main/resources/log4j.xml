@@ -7,7 +7,7 @@
 		<layout class="org.apache.log4j.PatternLayout">
 			<!-- Print the date in ISO 8601 format -->
 			<param name="ConversionPattern"
-				value="%d{yyyy-MM-dd HH:mm:ss} %p [%C:%L] - Uid%X{RequestId} - %m%n" />
+				value="%d{yyyy-MM-dd HH:mm:ss}|%p|%C:%L|%X{RequestId}|%X{ServiceName}|%m%n" />
 		</layout>
 	</appender>
 	<appender name="APPENDER_FILE"
@@ -18,7 +18,7 @@
 		<!-- param name="MaxBackupIndex" value="1"/ -->
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{yyyy-MM-dd HH:mm:ss} %p [%C:%L] - Uid%X{RequestId} - %m%n" />
+				value="%d{yyyy-MM-dd HH:mm:ss}|%p|%C:%L|%X{RequestId}|%X{ServiceName}|%m%n" />
 		</layout>
 	</appender>
 	<root>
